@@ -121,17 +121,6 @@ export MYSQL_DB="${DB_NAME}"
 export MYSQL_PORT="${DB_PORT}"
 EOF
 
-# Apply schema if available
-if [ -f "apply_schema.sh" ]; then
-    echo "Applying database schema..."
-    bash apply_schema.sh || {
-        echo "⚠ Failed to apply schema automatically. You can apply it manually with:"
-        echo "   bash apply_schema.sh"
-    }
-else
-    echo "No schema apply script found. You can apply schema manually using mysql -e with commands from schema_apply_commands.sql"
-fi
-
 echo "MySQL setup complete!"
 echo "Database: ${DB_NAME}"
 echo "Root user: root (password: ${DB_PASSWORD})"
