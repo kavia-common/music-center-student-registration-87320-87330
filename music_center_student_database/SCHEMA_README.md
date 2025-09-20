@@ -25,19 +25,18 @@ Or run commands individually (examples):
 - Create DB:
   $(cat db_connection.txt | sed 's/ myapp$//') -e "CREATE DATABASE IF NOT EXISTS myapp CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 - Create tables:
-  $(cat db_connection.txt | sed 's/ myapp$//') -e "USE myapp; CREATE TABLE IF NOT EXISTS instruments (id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100) NOT NULL UNIQUE, family VARCHAR(100) NULL, created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;"
+  $(cat db_connection.txt | sed 's/ myapp$//') -e "USE myapp; CREATE TABLE IF NOT EXISTS courses (id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, name ENUM('Children Piano', 'Adult Piano', 'Others') NOT NULL, description TEXT NULL, created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;"
 
 Verify schema:
 - List tables:
   $(cat db_connection.txt | sed 's/ myapp$//') -e "USE myapp; SHOW TABLES;"
-- Check seeded instruments:
-  $(cat db_connection.txt | sed 's/ myapp$//') -e "USE myapp; SELECT * FROM instruments LIMIT 20;"
+- Check seeded courses:
+  $(cat db_connection.txt | sed 's/ myapp$//') -e "USE myapp; SELECT * FROM courses LIMIT 20;"
 - Check view:
   $(cat db_connection.txt | sed 's/ myapp$//') -e "USE myapp; SELECT * FROM v_student_registrations LIMIT 10;"
 
 Example inserts:
 - Create a student:
-  $(cat db_connection.txt | sed 's/ myapp$//') -e "USE myapp; INSERT INTO students (first_name,last_name,email,phone,city,country) VALUES ('Alice','Nguyen','alice@example.com','+1-555-111-2222','Seattle','USA');"
-- Register the student for Piano (assuming instrument exists):
-  $(cat db_connection.txt | sed 's/ myapp$//') -e "USE myapp; INSERT INTO registrations (student_id,instrument_id,skill_level,registration_date,status) VALUES (1,(SELECT id FROM instruments WHERE name='Piano'),'beginner',CURDATE(),'active');"
-
+  $(cat db_connection.txt | sed 's/ myapp$//') -e "USE myapp; INSERT INTO students (student_name,parent,email,phone,city,country) VALUES ('Alice Nguyen','Mary Nguyen','alice@example.com','+1-555-111-2222','Seattle','USA');"
+- Register the student for Children Piano:
+  $(cat db_connection.txt | sed 's/ myapp$//') -e "USE myapp; INSERT INTO registrations (student_id,course_id,grade,registration_date,status) VALUES (1,(SELECT id FROM courses WHERE name='Children Piano'),'1',CURDATE(),'active');"
